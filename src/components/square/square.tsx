@@ -1,10 +1,13 @@
 import { SquareProps } from "../../../types";
 import "./square.scss";
 
-const Square = ({ value, column, row, onAddValue }: SquareProps) => {
-
+const Square = ({ value, onAddValue, isWinnerSquare }: SquareProps) => {
+ 
   return (
-    <button className="square" onClick={() => onAddValue()}>
+    <button
+      className={`square ${isWinnerSquare && "winner"}`}
+      onClick={() => onAddValue()}
+    >
       {value}
     </button>
   );

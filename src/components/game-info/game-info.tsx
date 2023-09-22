@@ -1,11 +1,20 @@
-import GameResult from "./game-result/game-result.component";
-import MovesInfo from "./moves-info/moves-info.component";
+import { useState, useEffect } from "react";
+import { GameInfoProps } from "../../../types";
 
-const GameInfo = () => {
+const GameInfo = ({ moves }: GameInfoProps) => {
+  const [sortedMoves, setSortedMoves] = useState(moves);
+
+  useEffect(() => {}, [moves]);
+
+  const sorting = () => {
+    const newMoves = [...sortedMoves];
+    setSortedMoves(newMoves.reverse());
+  };
+
   return (
     <div>
-      <GameResult />
-      <MovesInfo />
+      <button onClick={sorting}>Sort</button>
+      <ol>sortedMoves</ol>
     </div>
   );
 };
