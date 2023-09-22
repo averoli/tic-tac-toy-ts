@@ -14,7 +14,11 @@ const GameInfo = ({ moves }: GameInfoProps) => {
   return (
     <div>
       <button onClick={sorting}>Sort</button>
-      <ol>sortedMoves</ol>
+      <ol>
+        {sortedMoves.map((move, index) => (
+          <li>{move.id}</li>
+        ))}
+      </ol>
     </div>
   );
 };

@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Board from "../board/board";
-import GameInfo from "../game-info/game-info";
 import { GameBoard, squareValue, Move } from "../../../types";
 
 const Game = () => {
@@ -8,7 +7,7 @@ const Game = () => {
     board: Array(3).fill(Array(3).fill(null)),
   };
   const initialMoves: Move = {
-    id: -1,
+    id: 0,
     indexC: 0,
     indexR: 0,
   };
@@ -16,11 +15,11 @@ const Game = () => {
   const [currentValue, setCurrentValue] = useState<squareValue>("X");
   const [currentMove, setCurrentMove] = useState(0);
   const [historyMoves, setHistoryMoves] = useState<Move[]>([initialMoves]);
-  const [sorted, setSorted] = useState(historyMoves);
+  const [sorted, setSorted] = useState(false);
 
-  useEffect(() => {
-    setSorted(historyMoves);
-  }, [historyMoves]);
+  const toggleSorting = () => {
+    setSorted(!sorted);
+  };
 
   const handlePlay = (
     newSquares: squareValue[][],
@@ -42,12 +41,19 @@ const Game = () => {
   };
 
   const jumpToMove = (nextMove: number) => {
-    setCurrentMove(nextMove);
+     setCurrentMove(nextMove);
   };
 
-  const moves = historyMoves.map((move) => {
+  const sortMoves = (moves: Move[]) => {
+    if (sorted) {
+      return moves.slice().reverse();
+    }
+    return moves;
+  };
+
+  const moves = sortMoves(historyMoves).map((move) => {
     let description: string;
-    if (move.id > -1) {
+    if (move.id > 0) {
       description =
         "Ir al movimiento #" +
         (move.id + 1) +
@@ -66,13 +72,6 @@ const Game = () => {
     );
   });
 
-  const sorting = () => {
-    const newMoves = [...sorted];
-    setSorted(newMoves.reverse());
-    console.log(newMoves);
-    
-  };
-
   return (
     <>
       <Board
@@ -80,9 +79,11 @@ const Game = () => {
         currentValue={currentValue}
         onPlay={handlePlay}
       />
-      
+
       <div>
-        <button onClick={sorting}>Sort</button>
+        <button onClick={toggleSorting}>
+          {sorted ? "Sort Descending" : "Sort Ascending"}
+        </button>
         <ol>{moves}</ol>
       </div>
     </>
